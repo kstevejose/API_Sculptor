@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Sculptor</title>
+    <!-- JS-YAML library for client-side YAML parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto+Mono:wght@400;500&display=swap');
+        :root {
+            --primary: #0052B2;
+            --secondary: #00BF7D;
+            --text-primary: #000000;
+            --surface: #FFFFFF;
+            --background: #F0F2F5;
+            --border: #D9D9D9;
+            --radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 2rem;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 3rem;
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid #E5E7EB;
+        }
+        header { text-align: center; margin-bottom: 2.5rem; }
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, var(--primary) 30%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        header p { font-size: 1rem; color: #6B7280; margin-top: 0.5rem; }
+        .tabs { display: flex; border-bottom: 2px solid #E5E7EB; margin-bottom: 2.5rem; }
+        .tab-button {
+            padding: 1rem 0; margin: 0 1rem; border: none; background: none; cursor: pointer;
+            font-size: 1rem; font-weight: 600; color: #6B7280; position: relative;
+        }
+        .tab-button:first-child { margin-left: 0; }
+        .tab-button.active { color: var(--primary); }
+        .tab-button.active::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--primary);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .form-section { margin-bottom: 2.5rem; }
+        .form-section h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+        .path-list { list-style-type: none; padding: 0; max-height: 45vh; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+        .tag-group { margin-bottom: 1.5rem; padding: 0 1rem; }
+        .tag-group:first-child { padding-top: 1rem; }
+        .tag-group h4 { font-size: 0.9rem; font-weight: 600; color: var(--primary); text-transform: uppercase; }
+        .path-list li label { display: flex; padding: 0.75rem; cursor: pointer; }
+        input[type="checkbox"] { margin-right: 1rem; margin-top: 0.2rem; width: 1.15em; height: 1.15em; accent-color: var(--primary); }
+        .path-text { font-family: 'Roboto Mono', monospace; font-size: 1rem; }
+        .path-summary { color: #6B7280; font-size: 0.875rem; margin-left: 2.15rem; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); box-sizing: border-box; font-size: 1rem; }
+        .submit-btn {
+            width: 100%; background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--surface); border: none; padding: 1rem; border-radius: var(--radius);
+            cursor: pointer; font-size: 1.1rem; font-weight: 600;
+        }
+        .status-box { margin-top: 1.5rem; padding: 1rem; border-radius: var(--radius); text-align: center; display: none; }
+        .success { background-color: #D1FAE5; color: #065F46; }
+        .error { background-color: #FEE2E2; color: #991B1B; }
+        .diff-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .diff-result {
+            margin-top: 2rem; padding: 1.5rem; border-radius: var(--radius);
+            background-color: #0d1117; color: #e6edf3; font-family: 'Roboto Mono', monospace;
+            white-space: pre-wrap; word-wrap: break-word; max-height: 60vh; overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>API Sculptor</h1>
+            <p>The elegant suite to split, bundle, compare, and build your OpenAPI documents.</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab(event, 'splitter')">Splitter</button>
+            <button class="tab-button active" onclick="openTab(event, 'bundler')">Bundler</button>
+            <button class="tab-button" onclick="openTab(event, 'comparator')">Comparator</button>
+            <button class="tab-button" onclick="openTab(event, 'builder')">Builder</button>
+        </div>
+
+        <div id="splitter" class="tab-content">
+             <form id="split-form">
+                <div class="form-section"><h3>Upload Monolithic OpenAPI File</h3><input type="file" id="split-file-upload" accept=".yaml, .yml" required></div>
+                <button type="submit" class="submit-btn">Split & Update Project</button>
+            </form>
+            <div id="status-splitter" class="status-box"></div>
+        </div>
+
+        <div id="bundler" class="tab-content active">
+             <form id="bundle-form">
+                <div class="form-section"><h3>Select API Paths</h3>
+                    <div style="margin-bottom: 1rem;"><input type="text" id="search-input" placeholder="🔍 Search..."></div>
+                    <ul id="path-list-container" class="path-list"><li>Loading...</li></ul>
+                </div>
+                <div class="form-section"><h3>Output Filename</h3><input type="text" id="filename" value="bundled-api.yaml" required></div>
+                <button type="submit" class="submit-btn">Generate & Download Bundle</button>
+            </form>
+            <div id="status-bundler" class="status-box"></div>
+        </div>
+
+        <div id="comparator" class="tab-content">
+            <form id="diff-form">
+                <div class="diff-container">
+                    <div class="form-section"><h3>Old Specification (v1)</h3><input type="file" id="old-spec-upload" accept=".yaml, .yml" required></div>
+                    <div class="form-section"><h3>New Specification (v2)</h3><input type="file" id="new-spec-upload" accept=".yaml, .yml" required></div>
+                </div>
+                <button type="submit" class="submit-btn">Compare Specifications</button>
+            </form>
+            <div id="status-comparator" class="status-box"></div>
+            <div id="diff-result-container" class="diff-result" style="display: none;"></div>
+        </div>
+
+        <div id="builder" class="tab-content">
+            <form id="build-form">
+               <div class="form-section"><h3>Upload Bundled OpenAPI File</h3><input type="file" id="build-file-upload" accept=".yaml, .yml" required></div>
+               <div class="form-section"><h3>Output HTML Filename</h3><input type="text" id="build-filename" value="api-docs.html" required></div>
+               <button type="submit" class="submit-btn">Build Standalone Docs</button>
+           </form>
+           <div id="status-builder" class="status-box"></div>
+       </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            document.querySelectorAll('.tab-content, .tab-button').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        async function loadBundlerPaths() {
+             try {
+                const response = await fetch('/api/paths');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                const container = document.getElementById('path-list-container');
+                container.innerHTML = '';
+                for (const groupName in data.groups) {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'tag-group';
+                    groupDiv.innerHTML = `<h4>${groupName}</h4>`;
+                    const ul = document.createElement('ul');
+                    ul.style.cssText = 'list-style-type:none; padding:0;';
+                    data.groups[groupName].forEach(endpoint => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<label><input type="checkbox" name="paths" value="${endpoint.path}"><span class="path-text">${endpoint.path}</span></label><div class="path-summary">${endpoint.summary}</div>`;
+                        ul.appendChild(li);
+                    });
+                    groupDiv.appendChild(ul);
+                    container.appendChild(groupDiv);
+                }
+            } catch (error) {
+                document.getElementById('path-list-container').innerHTML = `<li style="color: #991B1B;">Failed to load paths.</li>`;
+            }
+        }
+        window.onload = loadBundlerPaths;
+
+        document.getElementById('bundle-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const statusDiv = document.getElementById('status-bundler');
+            const submitBtn = event.currentTarget.querySelector('.submit-btn');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'status-box'; statusDiv.innerText = "Bundling...";
+            submitBtn.disabled = true;
+
+            const selectedPaths = Array.from(document.querySelectorAll('#bundler input[name="paths"]:checked')).map(cb => cb.value);
+            const filename = document.getElementById('filename').value;
+
+            try {
+                const response = await fetch('/api/bundle', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paths: selectedPaths, filename: filename })
+                });
+                if (!response.ok) {
+                    const errorResult = await response.json();
+                    throw new Error(errorResult.message || 'Unknown error');
+                }
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none'; a.href = url; a.download = filename;
+                document.body.appendChild(a); a.click();
+                window.URL.revokeObjectURL(url); document.body.removeChild(a);
+                statusDiv.className = 'status-box success'; statusDiv.innerText = 'Download started!';
+            } catch (error) {
+                statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('split-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const statusDiv = document.getElementById('status-splitter');
+            const submitBtn = event.currentTarget.querySelector('.submit-btn');
+            const fileInput = document.getElementById('split-file-upload');
+            if (fileInput.files.length === 0) {
+                statusDiv.style.display = 'block'; statusDiv.className = 'status-box error';
+                statusDiv.innerText = 'Please select a file to split.'; return;
+            }
+            statusDiv.style.display = 'block'; statusDiv.className = 'status-box';
+            statusDiv.innerText = "Splitting and updating project...";
+            submitBtn.disabled = true;
+            try {
+                const fileContent = await fileInput.files[0].text();
+                const response = await fetch('/api/split', { method: 'POST', body: fileContent });
+                const result = await response.json();
+                if (!result.success) throw new Error(result.message);
+                statusDiv.className = 'status-box success'; statusDiv.innerText = result.message;
+            } catch (error) {
+                statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('diff-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const statusDiv = document.getElementById('status-comparator');
+            const resultContainer = document.getElementById('diff-result-container');
+            const submitBtn = event.currentTarget.querySelector('.submit-btn');
+            const oldFileInput = document.getElementById('old-spec-upload');
+            const newFileInput = document.getElementById('new-spec-upload');
+
+            if (oldFileInput.files.length === 0 || newFileInput.files.length === 0) {
+                statusDiv.style.display = 'block'; statusDiv.className = 'status-box error';
+                statusDiv.innerText = 'Please select both files to compare.'; return;
+            }
+            
+            statusDiv.style.display = 'block'; statusDiv.className = 'status-box';
+            statusDiv.innerText = "Comparing specifications...";
+            resultContainer.style.display = 'none';
+            submitBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('oldSpec', oldFileInput.files[0]);
+            formData.append('newSpec', newFileInput.files[0]);
+            
+            try {
+                const response = await fetch('/api/diff', { method: 'POST', body: formData });
+                const result = await response.json();
+                if (!result.success) throw new Error(result.message);
+                statusDiv.style.display = 'none';
+                resultContainer.innerText = result.diff;
+                resultContainer.style.display = 'block';
+            } catch (error) {
+                 statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
+            } finally {
+                 submitBtn.disabled = false;
+            }
+        });
+        
+        document.getElementById('build-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const statusDiv = document.getElementById('status-builder');
+            const submitBtn = event.currentTarget.querySelector('.submit-btn');
+            const fileInput = document.getElementById('build-file-upload');
+            const filename = document.getElementById('build-filename').value;
+
+            if (fileInput.files.length === 0) {
+                statusDiv.style.display = 'block'; statusDiv.className = 'status-box error';
+                statusDiv.innerText = 'Please select a bundled file to build.'; return;
+            }
+
+            statusDiv.style.display = 'block'; statusDiv.className = 'status-box';
+            statusDiv.innerText = "Building documentation...";
+            submitBtn.disabled = true;
+            
+            try {
+                const fileContent = await fileInput.files[0].text();
+                const specContent = jsyaml.load(fileContent);
+
+                const response = await fetch('/api/build', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ spec_content: specContent, filename: filename })
+                });
+
+                if (!response.ok) {
+                    const errorResult = await response.json();
+                    throw new Error(errorResult.message || 'Unknown build error');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none'; a.href = url; a.download = filename;
+                document.body.appendChild(a); a.click();
+                window.URL.revokeObjectURL(url); document.body.removeChild(a);
+                statusDiv.className = 'status-box success'; statusDiv.innerText = 'Download started!';
+
+            } catch (error) {
+                statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('search-input').addEventListener('keyup', (event) => {
+            const filter = event.target.value.toLowerCase();
+            document.querySelectorAll('#path-list-container .tag-group').forEach(group => {
+                let groupVisible = false;
+                group.querySelectorAll('li').forEach(li => {
+                    const text = li.textContent.toLowerCase();
+                    if (text.includes(filter)) {
+                        li.style.display = '';
+                        groupVisible = true;
+                    } else {
+                        li.style.display = 'none';
+                    }
+                });
+                group.style.display = groupVisible ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
+
