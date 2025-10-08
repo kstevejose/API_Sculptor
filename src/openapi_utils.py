@@ -1,17 +1,18 @@
 import yaml
+import os
 from config import ROOT_SPEC_FILE
 
 def load_yaml_file(filename):
-    """Safely loads and parses a YAML file."""
+    """Loads and parses any given YAML file."""
     try:
         with open(filename, 'r') as f:
             return yaml.safe_load(f)
     except (FileNotFoundError, yaml.YAMLError):
-        print(f"Warning: Could not load or parse {filename}")
+        # Return None on failure to be handled by the caller
         return None
 
 def get_tags_for_selected_paths(selected_paths):
-    """Finds all unique tags used by the selected paths by reading their referenced files."""
+    """Finds all unique tags used by the selected paths by reading their files."""
     collected_tag_names = set()
     for path_data in selected_paths.values():
         if '$ref' in path_data:
@@ -25,23 +26,27 @@ def get_tags_for_selected_paths(selected_paths):
     return collected_tag_names
 
 def get_grouped_paths():
-    """Scans the OpenAPI paths, groups them by tag, and returns a structured dictionary."""
+    """
+    Scans the OpenAPI paths from the ROOT_SPEC_FILE, groups them by tag,
+    and returns a structured dictionary for the UI.
+    """
     root_spec = load_yaml_file(ROOT_SPEC_FILE)
     if not (root_spec and 'paths' in root_spec):
-        raise FileNotFoundError(f"Could not load paths from '{ROOT_SPEC_FILE}'")
-    
+        raise FileNotFoundError(f"Root spec file '{ROOT_SPEC_FILE}' not found or is invalid.")
+
     grouped_paths = {}
     for path_string, path_data in root_spec.get('paths', {}).items():
         if '$ref' not in path_data:
             continue
+
         path_content = load_yaml_file(path_data['$ref'])
         if not path_content:
             continue
         
-        for _, details in path_content.items():
+        for method, details in path_content.items():
             if not isinstance(details, dict):
                 continue
-            
+
             summary = details.get('summary', 'No summary available.')
             tags = details.get('tags', ['Untagged'])
             main_tag = tags[0]
@@ -49,7 +54,10 @@ def get_grouped_paths():
             if main_tag not in grouped_paths:
                 grouped_paths[main_tag] = []
             
-            grouped_paths[main_tag].append({"path": path_string, "summary": summary})
-            break  # Process only the first HTTP method for path info
+            grouped_paths[main_tag].append({
+                "path": path_string,
+                "summary": summary
+            })
+            break 
             
     return grouped_paths
