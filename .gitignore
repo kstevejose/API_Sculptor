@@ -173,6 +173,7 @@ pids
 
 logs/
 
-#components
+#folder directory
 
 components/
+paths/ 
