@@ -6,334 +6,116 @@
     <title>API Sculptor</title>
     <!-- JS-YAML library for client-side YAML parsing -->
     <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto+Mono:wght@400;500&display=swap');
-        :root {
-            --primary: #0052B2;
-            --secondary: #00BF7D;
-            --text-primary: #000000;
-            --surface: #FFFFFF;
-            --background: #F0F2F5;
-            --border: #D9D9D9;
-            --radius: 8px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: var(--background);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 2rem;
-            display: grid;
-            place-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 800px;
-            padding: 3rem;
-            background-color: var(--surface);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid #E5E7EB;
-        }
-        header { text-align: center; margin-bottom: 2.5rem; }
-        header h1 {
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(45deg, var(--primary) 30%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        header p { font-size: 1rem; color: #6B7280; margin-top: 0.5rem; }
-        .tabs { display: flex; border-bottom: 2px solid #E5E7EB; margin-bottom: 2.5rem; }
-        .tab-button {
-            padding: 1rem 0; margin: 0 1rem; border: none; background: none; cursor: pointer;
-            font-size: 1rem; font-weight: 600; color: #6B7280; position: relative;
-        }
-        .tab-button:first-child { margin-left: 0; }
-        .tab-button.active { color: var(--primary); }
-        .tab-button.active::after {
-            content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--primary);
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .form-section { margin-bottom: 2.5rem; }
-        .form-section h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
-        .path-list { list-style-type: none; padding: 0; max-height: 45vh; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); }
-        .tag-group { margin-bottom: 1.5rem; padding: 0 1rem; }
-        .tag-group:first-child { padding-top: 1rem; }
-        .tag-group h4 { font-size: 0.9rem; font-weight: 600; color: var(--primary); text-transform: uppercase; }
-        .path-list li label { display: flex; padding: 0.75rem; cursor: pointer; }
-        input[type="checkbox"] { margin-right: 1rem; margin-top: 0.2rem; width: 1.15em; height: 1.15em; accent-color: var(--primary); }
-        .path-text { font-family: 'Roboto Mono', monospace; font-size: 1rem; }
-        .path-summary { color: #6B7280; font-size: 0.875rem; margin-left: 2.15rem; }
-        input[type="text"], input[type="file"] { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); box-sizing: border-box; font-size: 1rem; }
-        .submit-btn {
-            width: 100%; background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--surface); border: none; padding: 1rem; border-radius: var(--radius);
-            cursor: pointer; font-size: 1.1rem; font-weight: 600;
-        }
-        .status-box { margin-top: 1.5rem; padding: 1rem; border-radius: var(--radius); text-align: center; display: none; }
-        .success { background-color: #D1FAE5; color: #065F46; }
-        .error { background-color: #FEE2E2; color: #991B1B; }
-        .diff-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .diff-result {
-            margin-top: 2rem; padding: 1.5rem; border-radius: var(--radius);
-            background-color: #0d1117; color: #e6edf3; font-family: 'Roboto Mono', monospace;
-            white-space: pre-wrap; word-wrap: break-word; max-height: 60vh; overflow-y: auto;
-        }
-    </style>
+    <!-- Tailwind CSS (used for utility classes) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Link to your external stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>API Sculptor</h1>
-            <p>The elegant suite to split, bundle, and build your OpenAPI documents.</p>
+<body class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23f3f4f6" fill-opacity="0.4"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+    
+    <div class="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl mb-6 shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            </div>
+            <h1 class="text-5xl font-bold gradient-text mb-4 tracking-tight">API Sculptor</h1>
+            <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">The elegant suite to split and bundle your OpenAPI documents with precision and style.</p>
         </header>
 
-        <div class="tabs">
-            <button class="tab-button" onclick="openTab(event, 'splitter')">Splitter</button>
-            <button class="tab-button active" onclick="openTab(event, 'bundler')">Bundler</button>
-            <button class="tab-button" onclick="openTab(event, 'comparator')">Comparator</button>
-            <button class="tab-button" onclick="openTab(event, 'builder')">Builder</button>
-        </div>
+        <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+            <!-- Navigation Tabs -->
+            <div class="border-b border-gray-200 bg-gray-50/50">
+                <nav class="flex" role="tablist">
+                    <button class="tab-button active flex-1 px-6 py-4 text-sm font-semibold text-blue-600 border-b-2 border-blue-600" onclick="openTab(event, 'split-bundle')">
+                        <div class="flex items-center justify-center space-x-2">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>Load & Split your APIs</span>
+                        </div>
+                    </button>
+                    <button class="tab-button flex-1 px-6 py-4 text-sm font-semibold text-gray-500 border-b-2 border-transparent" onclick="openTab(event, 'builder')">
+                        <div class="flex items-center justify-center space-x-2">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <span>Convert to HTML</span>
+                        </div>
+                    </button>
+                </nav>
+            </div>
 
-        <div id="splitter" class="tab-content">
-             <form id="split-form">
-                <div class="form-section"><h3>Upload Monolithic OpenAPI File</h3><input type="file" id="split-file-upload" accept=".yaml, .yml" required></div>
-                <button type="submit" class="submit-btn">Split & Update Project</button>
-            </form>
-            <div id="status-splitter" class="status-box"></div>
-        </div>
-
-        <div id="bundler" class="tab-content active">
-             <form id="bundle-form">
-                <div class="form-section"><h3>Select API Paths</h3>
-                    <div style="margin-bottom: 1rem;"><input type="text" id="search-input" placeholder="🔍 Search..."></div>
-                    <ul id="path-list-container" class="path-list"><li>Loading...</li></ul>
+            <!-- Tab Content Area -->
+            <div class="p-8">
+                <div id="split-bundle" class="tab-content space-y-12">
+                     <div id="splitter-section">
+                        <form id="split-form" class="space-y-6">
+                            <div class="space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path></svg>Split a Monolithic File</h3>
+                                <p class="text-sm text-gray-500">Upload a single OpenAPI file to replace the current project files on the server.</p>
+                                <label for="split-file-upload" class="file-drop-zone">
+                                    <div class="file-drop-content">
+                                        <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                        <p class="file-drop-text">Drag & drop your YAML file here, or <span class="text-blue-600 font-semibold">click to browse</span></p>
+                                        <p class="file-drop-filename"></p>
+                                    </div>
+                                    <input type="file" id="split-file-upload" accept=".yaml, .yml" required class="hidden">
+                                </label>
+                            </div>
+                            <button type="submit" class="btn-primary w-full gradient-primary text-white font-semibold py-4 rounded-xl">Split & Update Project</button>
+                        </form>
+                        <div id="status-splitter" class="status-message hidden mt-6"></div>
+                    </div>
+                    <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div><div class="relative flex justify-center"><span class="bg-white px-3 text-sm font-medium text-gray-500">Then</span></div></div>
+                    <div id="bundler-section">
+                        <form id="bundle-form" class="space-y-6">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Bundle Endpoints</h3>
+                                <div class="flex items-center space-x-2">
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div>
+                                        <input type="text" id="filename"  placeholder="filename.yaml" required class="w-full pl-10 pr-4 py-3 border rounded-xl font-mono">
+                                    </div>
+                                    <button type="submit" class="btn-primary gradient-primary text-white font-semibold py-3 px-5 rounded-xl flex-shrink-0">Generate & Download</button>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                                    <input type="text" id="search-input" placeholder="Search endpoints..." class="w-full pl-10 pr-4 py-3 border rounded-xl">
+                                </div>
+                                <div class="bg-gray-50 rounded-xl border max-h-96 overflow-y-auto custom-scrollbar">
+                                    <ul id="path-list-container" class="p-4 space-y-2"><li>Loading...</li></ul>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="status-bundler" class="status-message hidden mt-6"></div>
+                    </div>
                 </div>
-                <div class="form-section"><h3>Output Filename</h3><input type="text" id="filename" value="bundled-api.yaml" required></div>
-                <button type="submit" class="submit-btn">Generate & Download Bundle</button>
-            </form>
-            <div id="status-bundler" class="status-box"></div>
-        </div>
-
-        <div id="comparator" class="tab-content">
-            <form id="diff-form">
-                <div class="diff-container">
-                    <div class="form-section"><h3>Old Specification (v1)</h3><input type="file" id="old-spec-upload" accept=".yaml, .yml" required></div>
-                    <div class="form-section"><h3>New Specification (v2)</h3><input type="file" id="new-spec-upload" accept=".yaml, .yml" required></div>
+                <div id="builder" class="tab-content hidden">
+                    <form id="build-form" class="space-y-8">
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l-3 3m-3 3V10"></path></svg>Upload Bundled OpenAPI File</h3>
+                             <label for="build-file-upload" class="file-drop-zone">
+                                <div class="file-drop-content">
+                                    <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                    <p class="file-drop-text">Drag & drop your YAML file here, or <span class="text-blue-600 font-semibold">click to browse</span></p>
+                                    <p class="file-drop-filename"></p>
+                                </div>
+                                <input type="file" id="build-file-upload" accept=".yaml, .yml" required class="hidden">
+                            </label>
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>Output HTML Filename</h3>
+                            <input type="text" id="build-filename" value="api-docs.html" required class="w-full px-4 py-3 border rounded-xl font-mono">
+                        </div>
+                        <button type="submit" class="btn-primary w-full gradient-primary text-white font-semibold py-4 rounded-xl">Build Standalone Docs</button>
+                    </form>
+                    <div id="status-builder" class="status-message hidden mt-6"></div>
                 </div>
-                <button type="submit" class="submit-btn">Compare Specifications</button>
-            </form>
-            <div id="status-comparator" class="status-box"></div>
-            <div id="diff-result-container" class="diff-result" style="display: none;"></div>
+            </div>
         </div>
-
-        <div id="builder" class="tab-content">
-            <form id="build-form">
-               <div class="form-section"><h3>Upload Bundled OpenAPI File</h3><input type="file" id="build-file-upload" accept=".yaml, .yml" required></div>
-               <div class="form-section"><h3>Output HTML Filename</h3><input type="text" id="build-filename" value="api-docs.html" required></div>
-               <button type="submit" class="submit-btn">Build Standalone Docs</button>
-           </form>
-           <div id="status-builder" class="status-box"></div>
-       </div>
     </div>
-
-    <script>
-        function openTab(evt, tabName) {
-            document.querySelectorAll('.tab-content, .tab-button').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
-        }
-
-        async function loadBundlerPaths() {
-             try {
-                const response = await fetch('/api/paths');
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                const container = document.getElementById('path-list-container');
-                container.innerHTML = '';
-                for (const groupName in data.groups) {
-                    const groupDiv = document.createElement('div');
-                    groupDiv.className = 'tag-group';
-                    groupDiv.innerHTML = `<h4>${groupName}</h4>`;
-                    const ul = document.createElement('ul');
-                    ul.style.cssText = 'list-style-type:none; padding:0;';
-                    data.groups[groupName].forEach(endpoint => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `<label><input type="checkbox" name="paths" value="${endpoint.path}"><span class="path-text">${endpoint.path}</span></label><div class="path-summary">${endpoint.summary}</div>`;
-                        ul.appendChild(li);
-                    });
-                    groupDiv.appendChild(ul);
-                    container.appendChild(groupDiv);
-                }
-            } catch (error) {
-                document.getElementById('path-list-container').innerHTML = `<li style="color: #991B1B;">Failed to load paths.</li>`;
-            }
-        }
-        window.onload = loadBundlerPaths;
-
-        document.getElementById('bundle-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const statusDiv = document.getElementById('status-bundler');
-            const submitBtn = event.currentTarget.querySelector('.submit-btn');
-            statusDiv.style.display = 'block';
-            statusDiv.className = 'status-box'; statusDiv.innerText = "Bundling...";
-            submitBtn.disabled = true;
-
-            const selectedPaths = Array.from(document.querySelectorAll('#bundler input[name="paths"]:checked')).map(cb => cb.value);
-            const filename = document.getElementById('filename').value;
-
-            try {
-                const response = await fetch('/api/bundle', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ paths: selectedPaths, filename: filename })
-                });
-                if (!response.ok) {
-                    const errorResult = await response.json();
-                    throw new Error(errorResult.message || 'Unknown error');
-                }
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none'; a.href = url; a.download = filename;
-                document.body.appendChild(a); a.click();
-                window.URL.revokeObjectURL(url); document.body.removeChild(a);
-                statusDiv.className = 'status-box success'; statusDiv.innerText = 'Download started!';
-            } catch (error) {
-                statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
-            } finally {
-                submitBtn.disabled = false;
-            }
-        });
-
-        document.getElementById('split-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const statusDiv = document.getElementById('status-splitter');
-            const submitBtn = event.currentTarget.querySelector('.submit-btn');
-            const fileInput = document.getElementById('split-file-upload');
-            if (fileInput.files.length === 0) {
-                statusDiv.style.display = 'block'; statusDiv.className = 'status-box error';
-                statusDiv.innerText = 'Please select a file to split.'; return;
-            }
-            statusDiv.style.display = 'block'; statusDiv.className = 'status-box';
-            statusDiv.innerText = "Splitting and updating project...";
-            submitBtn.disabled = true;
-            try {
-                const fileContent = await fileInput.files[0].text();
-                const response = await fetch('/api/split', { method: 'POST', body: fileContent });
-                const result = await response.json();
-                if (!result.success) throw new Error(result.message);
-                statusDiv.className = 'status-box success'; statusDiv.innerText = result.message;
-            } catch (error) {
-                statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
-            } finally {
-                submitBtn.disabled = false;
-            }
-        });
-
-        document.getElementById('diff-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const statusDiv = document.getElementById('status-comparator');
-            const resultContainer = document.getElementById('diff-result-container');
-            const submitBtn = event.currentTarget.querySelector('.submit-btn');
-            const oldFileInput = document.getElementById('old-spec-upload');
-            const newFileInput = document.getElementById('new-spec-upload');
-
-            if (oldFileInput.files.length === 0 || newFileInput.files.length === 0) {
-                statusDiv.style.display = 'block'; statusDiv.className = 'status-box error';
-                statusDiv.innerText = 'Please select both files to compare.'; return;
-            }
-            
-            statusDiv.style.display = 'block'; statusDiv.className = 'status-box';
-            statusDiv.innerText = "Comparing specifications...";
-            resultContainer.style.display = 'none';
-            submitBtn.disabled = true;
-
-            const formData = new FormData();
-            formData.append('oldSpec', oldFileInput.files[0]);
-            formData.append('newSpec', newFileInput.files[0]);
-            
-            try {
-                const response = await fetch('/api/diff', { method: 'POST', body: formData });
-                const result = await response.json();
-                if (!result.success) throw new Error(result.message);
-                statusDiv.style.display = 'none';
-                resultContainer.innerText = result.diff;
-                resultContainer.style.display = 'block';
-            } catch (error) {
-                 statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
-            } finally {
-                 submitBtn.disabled = false;
-            }
-        });
-        
-        document.getElementById('build-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const statusDiv = document.getElementById('status-builder');
-            const submitBtn = event.currentTarget.querySelector('.submit-btn');
-            const fileInput = document.getElementById('build-file-upload');
-            const filename = document.getElementById('build-filename').value;
-
-            if (fileInput.files.length === 0) {
-                statusDiv.style.display = 'block'; statusDiv.className = 'status-box error';
-                statusDiv.innerText = 'Please select a bundled file to build.'; return;
-            }
-
-            statusDiv.style.display = 'block'; statusDiv.className = 'status-box';
-            statusDiv.innerText = "Building documentation...";
-            submitBtn.disabled = true;
-            
-            try {
-                const fileContent = await fileInput.files[0].text();
-                const specContent = jsyaml.load(fileContent);
-
-                const response = await fetch('/api/build', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ spec_content: specContent, filename: filename })
-                });
-
-                if (!response.ok) {
-                    const errorResult = await response.json();
-                    throw new Error(errorResult.message || 'Unknown build error');
-                }
-
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none'; a.href = url; a.download = filename;
-                document.body.appendChild(a); a.click();
-                window.URL.revokeObjectURL(url); document.body.removeChild(a);
-                statusDiv.className = 'status-box success'; statusDiv.innerText = 'Download started!';
-
-            } catch (error) {
-                statusDiv.className = 'status-box error'; statusDiv.innerText = `Error: ${error.message}`;
-            } finally {
-                submitBtn.disabled = false;
-            }
-        });
-
-        document.getElementById('search-input').addEventListener('keyup', (event) => {
-            const filter = event.target.value.toLowerCase();
-            document.querySelectorAll('#path-list-container .tag-group').forEach(group => {
-                let groupVisible = false;
-                group.querySelectorAll('li').forEach(li => {
-                    const text = li.textContent.toLowerCase();
-                    if (text.includes(filter)) {
-                        li.style.display = '';
-                        groupVisible = true;
-                    } else {
-                        li.style.display = 'none';
-                    }
-                });
-                group.style.display = groupVisible ? '' : 'none';
-            });
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
 
