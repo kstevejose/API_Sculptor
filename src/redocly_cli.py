@@ -38,13 +38,12 @@ def build_docs(input_file, output_file):
     command_args = ['build-docs', input_file, '--output', output_file]
     run_redocly_or_error(command_args)
 
-def diff_specs(old_spec_file, new_spec_file):
-    """
-    Executes the 'redocly diff' command and returns the output.
-    Returns the diff text on success.
-    """
-    command_args = ['diff', old_spec_file, new_spec_file]
-    # We capture stdout here because the diff output is sent to stdout
-    result = run_redocly_or_error(command_args)
-    return result.stdout
-
+# def diff_specs(old_spec_file, new_spec_file):
+#     """
+#     Executes the 'redocly diff' command and returns the output.
+#     Returns the diff text on success.
+#     """
+#     command_args = ['diff', old_spec_file, new_spec_file]
+#     # We capture stdout here because the diff output is sent to stdout
+#     result = run_redocly_or_error(command_args)
+#     return result.stdout
