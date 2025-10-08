@@ -167,3 +167,12 @@ pids
 *.pid
 *.seed
 *.pid.lock
+
+
+# logs 
+
+logs/
+
+#components
+
+components/
