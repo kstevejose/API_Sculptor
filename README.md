@@ -6,13 +6,10 @@ The underlying technology is `Redocly CLI`, the tool is useful if you are not go
 
 ## 🚀 Features
 
-- **Interactive API Explorer**: Browse your OpenAPI specification with a clean, organized interface
-- **Selective Bundling**: Choose specific endpoints and generate custom API bundles
-
-- **Split Monolithic Specs**: Break down large OpenAPI files into modular components
-
-
-- **Modern UI**: Clean, responsive interface built with modern web technologies
+- **Interactive API Explorer**: Browse your OpenAPI specification with a clean, organized interface.
+- **Selective Bundling**: Choose specific endpoints and generate custom API bundles.
+- **Split Monolithic Specs**: Break down large OpenAPI files into modular components.
+- **Modern UI**: Clean, responsive interface built with modern web technologies.
 
 ## 📋 Prerequisites
 
@@ -22,7 +19,7 @@ The underlying technology is `Redocly CLI`, the tool is useful if you are not go
 
 ## 🛠️ Installation
 
-### 1. Clone the Repository
+### 1. Clone the Repository.
 ```bash
 git clone <your-repo-url>
 cd API_Sculptor
@@ -36,15 +33,9 @@ pip install -r requirements.txt
 ### 3. Install Redocly CLI
 Choose one of the following options:
 
-**Option A: Global Installation (Recommended)**
+**Global Installation (Recommended)**
 ```bash
 npm install -g @redocly/cli
-```
-
-**Option B: Use with npx (No installation required)**
-```bash
-# Just ensure Node.js is installed - the app will use npx automatically
-node --version
 ```
 
 ## 🎯 Quick Start
@@ -96,13 +87,13 @@ info:
   version: 1.0.0
 paths:
   /users:
-    $ref: paths/users.yaml
+    $ref: components/schemas/userrequest
   /orders:
-    $ref: paths/orders.yaml
+    $ref: components/schemas/orderrequest
 components:
   schemas:
     User:
-      $ref: components/schemas/User.yaml
+      $ref: components/schemas/User
 ```
 
 ## 🌐 API Endpoints
@@ -119,7 +110,7 @@ components:
 ## 📖 Usage Guide
 
 ### 1. Exploring Your API
-1. Run the application and go to the URL. 
+1. Run the application using and go to the URL. 
 2. The interface will automatically load your OpenAPI specification
 3. Browse endpoints organized by tags(_This will only work, if you have tagged your endpoints in the OpenAPI file.)
 4. Use the search functionality to find specific endpoints
@@ -131,7 +122,7 @@ components:
 4. The system will generate a clean, bundled OpenAPI file
 
 ### 3. Splitting Monolithic Specifications
-1. Use the "**Split Specification**" feature
+1. Use the "**Splitter**" feature
 2. Upload your monolithic OpenAPI file
 3. The system will break it down into modular components
 4. Restart the server to see the new structure
