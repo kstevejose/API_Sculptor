@@ -22,7 +22,7 @@
                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
             </div>
             <h1 class="text-5xl font-bold gradient-text mb-4 tracking-tight">API Sculptor</h1>
-            <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">The elegant suite to split and bundle your OpenAPI documents with precision and style.</p>
+            <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">The elegant suite to split and generate custom OpenAPI documents with precision and style.</p>
         </header>
 
         <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
@@ -51,7 +51,7 @@
                         <form id="split-form" class="space-y-6">
                             <div class="space-y-4">
                                 <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path></svg>Split a Monolithic File</h3>
-                                <p class="text-sm text-gray-500">Upload a single OpenAPI file to replace the current project files on the server.</p>
+                                <p class="text-sm text-gray-500">Upload a single OpenAPI file that you want to split into multiple .yaml files.</p>
                                 <label for="split-file-upload" class="file-drop-zone">
                                     <div class="file-drop-content">
                                         <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
@@ -69,7 +69,7 @@
                     <div id="bundler-section">
                         <form id="bundle-form" class="space-y-6">
                             <div class="flex justify-between items-center">
-                                <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Bundle Endpoints</h3>
+                                <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Select APIs to generate doc</h3>
                                 <div class="flex items-center space-x-2">
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div>
@@ -94,7 +94,7 @@
                 <div id="builder" class="tab-content hidden">
                     <form id="build-form" class="space-y-8">
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l-3 3m-3 3V10"></path></svg>Upload Bundled OpenAPI File</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l-3 3m-3 3V10"></path></svg>Upload your OpenAPI File</h3>
                              <label for="build-file-upload" class="file-drop-zone">
                                 <div class="file-drop-content">
                                     <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
@@ -108,7 +108,7 @@
                             <h3 class="text-lg font-semibold text-gray-800 flex items-center"><svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>Output HTML Filename</h3>
                             <input type="text" id="build-filename" value="api-docs.html" required class="w-full px-4 py-3 border rounded-xl font-mono">
                         </div>
-                        <button type="submit" class="btn-primary w-full gradient-primary text-white font-semibold py-4 rounded-xl">Build Standalone Docs</button>
+                        <button type="submit" class="btn-primary w-full gradient-primary text-white font-semibold py-4 rounded-xl">Download HTML</button>
                     </form>
                     <div id="status-builder" class="status-message hidden mt-6"></div>
                 </div>
