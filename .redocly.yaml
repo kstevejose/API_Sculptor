@@ -1,0 +1,5 @@
+# Alternative syntax for older Redocly CLI versions
+
+decorators:
+  # This is the older, but still common, way to enable the feature.
+  remove-unused-components: on

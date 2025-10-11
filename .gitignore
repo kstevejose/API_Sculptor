@@ -167,3 +167,13 @@ pids
 *.pid
 *.seed
 *.pid.lock
+
+
+# logs 
+
+logs/
+
+#folder directory
+
+components/
+paths/ 
