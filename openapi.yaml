@@ -29,6 +29,9 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.12
+externalDocs:
+  description: Find out more about Swagger
+  url: https://swagger.io
 servers:
   - url: https://petstore3.swagger.io/api/v3
 tags:
@@ -37,14 +40,40 @@ tags:
     externalDocs:
       description: Find out more
       url: https://swagger.io
-externalDocs:
-  description: Find out more about Swagger
-  url: https://swagger.io
+  - name: store
+    description: Access to Petstore orders
+    externalDocs:
+      description: Find out more about our store
+      url: https://swagger.io
+  - name: user
+    description: Operations about user
 paths:
   /pet:
     $ref: paths/pet.yaml
   /pet/findByStatus:
     $ref: paths/pet_findByStatus.yaml
+  /pet/findByTags:
+    $ref: paths/pet_findByTags.yaml
+  /pet/{petId}:
+    $ref: paths/pet_{petId}.yaml
+  /pet/{petId}/uploadImage:
+    $ref: paths/pet_{petId}_uploadImage.yaml
+  /store/inventory:
+    $ref: paths/store_inventory.yaml
+  /store/order:
+    $ref: paths/store_order.yaml
+  /store/order/{orderId}:
+    $ref: paths/store_order_{orderId}.yaml
+  /user:
+    $ref: paths/user.yaml
+  /user/createWithList:
+    $ref: paths/user_createWithList.yaml
+  /user/login:
+    $ref: paths/user_login.yaml
+  /user/logout:
+    $ref: paths/user_logout.yaml
+  /user/{username}:
+    $ref: paths/user_{username}.yaml
 components:
   securitySchemes:
     petstore_auth:
