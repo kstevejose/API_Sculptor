@@ -1,5 +1,6 @@
 import yaml
 import os
+import logging 
 from config import ROOT_SPEC_FILE
 
 def load_yaml_file(filename):
@@ -48,6 +49,7 @@ def get_grouped_paths():
                 continue
 
             summary = details.get('summary', 'No summary available.')
+            
             tags = details.get('tags', ['Untagged'])
             main_tag = tags[0]
 
