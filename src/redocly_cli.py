@@ -1,5 +1,6 @@
 import subprocess
 import os
+import logging 
 
 def run_redocly_or_error(args):
     """Run Redocly CLI robustly across environments.
