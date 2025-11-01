@@ -1,7 +1,7 @@
 flask==3.0.0
 pyyaml==6.0.1
 python-dotenv==1.0.0
-pydantic==2.5.0
+pydantic==1.10.14
 
 # Dev dependencies
 pytest==7.4.3
