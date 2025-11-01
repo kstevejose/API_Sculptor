@@ -1,8 +1,13 @@
 # API Sculptor
 
-A powerful web-based tool for  bundling, building, and splitting OpenAPI specifications. API Sculptor provides an intuitive interface for working with modular OpenAPI files, allowing you to select specific endpoints and generate custom API documentation bundles.
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Node.js 16+](https://img.shields.io/badge/node-16+-green.svg)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
 
-The underlying technology is `Redocly CLI`, the tool is useful if you are not good at not remembering the commands to perform thes functions.  
+A powerful web-based tool for bundling, building, and splitting OpenAPI specifications. API Sculptor provides an intuitive interface for working with modular OpenAPI files, allowing you to select specific endpoints and generate custom API documentation bundles.
+
+The underlying technology is `Redocly CLI`, a web-based alternative to remembering command-line arguments.  
 
 ## 🚀 Features
 
@@ -93,7 +98,7 @@ paths:
 components:
   schemas:
     User:
-      $ref: components/schemas/User
+      $ref: components/schemas/Users
 ```
 
 ## 🌐 API Endpoints
