@@ -1,12 +1,21 @@
 import yaml
 import os
-import logging 
 from config import ROOT_SPEC_FILE
+
+# Get the project root directory (parent of src/)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+def get_project_path(filename):
+    """Returns an absolute path to a file in the project root."""
+    return os.path.join(PROJECT_ROOT, filename)
 
 def load_yaml_file(filename):
     """Loads and parses any given YAML file."""
     try:
-        with open(filename, 'r') as f:
+        # Always use project root path
+        filepath = get_project_path(filename)
+        
+        with open(filepath, 'r') as f:
             return yaml.safe_load(f)
     except (FileNotFoundError, yaml.YAMLError):
         # Return None on failure to be handled by the caller
