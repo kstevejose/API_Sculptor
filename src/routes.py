@@ -9,9 +9,16 @@ from flask import Flask, render_template, request, jsonify, send_file
 from . import openapi_utils, redocly_cli
 from config import TEMP_SPEC_FILE, ROOT_SPEC_FILE
 
+# Get the project root directory (parent of src/)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+def get_project_path(filename):
+    """Returns an absolute path to a file in the project root."""
+    return os.path.join(PROJECT_ROOT, filename)
+
 # --- Logging Configuration ---
 # Create a 'logs' directory if it doesn't exist at the project root.
-log_dir = 'logs'
+log_dir = get_project_path('logs')
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
@@ -92,13 +99,16 @@ def bundle_spec_endpoint():
         temp_spec = {k: v for k, v in root_spec.items() if k not in ['paths', 'tags']}
         temp_spec.update({'tags': filtered_tags, 'paths': selected_paths})
         
-        with open(TEMP_SPEC_FILE, 'w') as f:
+        temp_file_path = get_project_path(TEMP_SPEC_FILE)
+        output_file_path = get_project_path(output_filename)
+        
+        with open(temp_file_path, 'w') as f:
             yaml.dump(temp_spec, f, sort_keys=False)
             
-        redocly_cli.bundle_spec(TEMP_SPEC_FILE, output_filename)
+        redocly_cli.bundle_spec(temp_file_path, output_file_path)
         logging.info(f"Bundle '{output_filename}' generated successfully.")
         
-        with open(output_filename, 'rb') as f:
+        with open(output_file_path, 'rb') as f:
             file_data = f.read()
         
         return send_file(io.BytesIO(file_data), as_attachment=True, download_name=output_filename)
@@ -108,15 +118,15 @@ def bundle_spec_endpoint():
         logging.error(f"Bundling failed: {error_message}")
         return jsonify({"success": False, "message": f"Error: {error_message}"}), 500
     finally:
-        if os.path.exists(TEMP_SPEC_FILE): os.remove(TEMP_SPEC_FILE)
-        if os.path.exists(output_filename): os.remove(output_filename)
+        if os.path.exists(temp_file_path): os.remove(temp_file_path)
+        if os.path.exists(output_file_path): os.remove(output_file_path)
 
 @app.route('/api/split', methods=['POST'])
 def split_spec_endpoint():
     """Endpoint to split a monolithic file and update the project."""
     logging.info("Starting split process.")
-    temp_input_file = "temp_monolith_for_splitting.yaml"
-    temp_output_dir = "temp_split_output"
+    temp_input_file = get_project_path("temp_monolith_for_splitting.yaml")
+    temp_output_dir = get_project_path("temp_split_output")
     try:
         with open(temp_input_file, 'w') as f:
             f.write(request.data.decode('utf-8'))
@@ -128,7 +138,7 @@ def split_spec_endpoint():
         
         for item in os.listdir(temp_output_dir):
             src_path = os.path.join(temp_output_dir, item)
-            dest_path = os.path.join('.', item)
+            dest_path = get_project_path(item)
             if os.path.isdir(src_path):
                 if os.path.exists(dest_path): shutil.rmtree(dest_path)
                 shutil.move(src_path, dest_path)
@@ -158,9 +168,8 @@ def build_docs_endpoint():
 
     logging.info(f"Starting build-docs process for '{output_filename}'")
     
-    project_root = os.path.abspath(os.path.join(app.root_path, '..'))
-    temp_input_file = os.path.join(project_root, "temp_bundle_for_build.yaml")
-    temp_output_file = os.path.join(project_root, "temp_docs.html")
+    temp_input_file = get_project_path("temp_bundle_for_build.yaml")
+    temp_output_file = get_project_path("temp_docs.html")
     
     try:
         spec_content = data.get('spec_content')
